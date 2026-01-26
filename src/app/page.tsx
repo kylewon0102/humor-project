@@ -10,6 +10,10 @@ export default function Home() {
             knw2135@columbia.edu
           </a>
         </header>
+        <text> This is Temporary page for week 1</text>
+        <text>
+          Hello World!
+        </text>
         <section className={styles.content} aria-label="Profile content" />
       </main>
     </div>
