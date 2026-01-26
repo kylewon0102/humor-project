@@ -1,21 +1,23 @@
 .page {
-  --background: #f7f4ef;
-  --foreground: #ffffff;
-  --border: #e4e0da;
-  --text-primary: #171514;
-  --text-secondary: #6a645c;
-  --accent: #d4a259;
-  --accent-soft: rgba(212, 162, 89, 0.15);
+  --background: #0b0f19;
+  --foreground: #121826;
+  --border: #1f2937;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.15);
 
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
   font-family: var(--font-geist-sans);
+
   background:
-    radial-gradient(circle at 20% 20%, rgba(212, 162, 89, 0.18), transparent 55%),
-    radial-gradient(circle at 80% 10%, rgba(105, 145, 163, 0.18), transparent 50%),
-    linear-gradient(160deg, #f7f4ef 0%, #efe9e1 55%, #f2ede6 100%);
+          radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 80%),
+          radial-gradient(circle at 80% 10%, rgba(99, 102, 241, 0.10), transparent 70%),
+          linear-gradient(160deg, #0b0f19 0%, #0e1424 55%, #0b0f19 100%);
+
   color: var(--text-primary);
 }
 
