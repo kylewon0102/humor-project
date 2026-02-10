@@ -2,6 +2,18 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Create a local env file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Fill in `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, and
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env`.
+
+For Google OAuth, set the redirect URL in Supabase/Auth to
+`http://localhost:3000/auth/callback` (and your Vercel URL with the same path).
+
 First, run the development server:
 
 ```bash

@@ -25,9 +25,8 @@
   width: 100%;
   max-width: 1320px;
   display: flex;
-  flex-direction: column;
   align-items: stretch;
-  gap: 36px;
+  gap: 32px;
   background-color: var(--foreground);
   padding: 80px 72px;
   border: 1px solid var(--border);
@@ -36,6 +35,15 @@
   position: relative;
   overflow: hidden;
   animation: rise 0.8s ease-out both;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 36px;
+  min-width: 0;
 }
 
 .main::before {
@@ -60,6 +68,14 @@
 .logoRow {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
   gap: 14px;
 }
 
@@ -77,6 +93,28 @@
   border-radius: 999px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.9);
+}
+
+.logoMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerSignOut {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.headerSignOut:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .name {
@@ -221,6 +259,7 @@
 
 @media (max-width: 600px) {
   .main {
+    flex-direction: column;
     padding: 48px 28px;
     gap: 28px;
   }
