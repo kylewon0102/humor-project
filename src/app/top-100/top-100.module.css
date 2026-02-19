@@ -1,0 +1,149 @@
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 18px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  align-items: end;
+  animation: podiumPop 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.podiumLabel {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
+}
+
+.podiumWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.podiumLabel::before,
+.podiumLabel::after {
+  content: "";
+  height: 1px;
+  width: 22px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.podiumDivider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  margin: 8px 0 4px;
+}
+
+.podiumCard {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.08), rgba(9, 14, 26, 0.8)),
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.35), transparent 55%),
+    rgba(9, 14, 26, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  position: relative;
+}
+
+.podiumHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.podiumImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  display: block;
+  background: rgba(15, 23, 42, 0.7);
+  margin-top: 14px;
+}
+
+.podiumImageSecondary {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  margin-top: 22px;
+}
+
+.podiumFirst {
+  order: 2;
+  transform: translateY(-14px);
+  box-shadow:
+    0 28px 80px rgba(255, 214, 122, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 220, 140, 0.95);
+  background:
+    linear-gradient(140deg, rgba(255, 252, 225, 0.62), rgba(9, 14, 26, 0.78)),
+    radial-gradient(circle at 22% 8%, rgba(255, 249, 225, 1), transparent 52%),
+    rgba(9, 14, 26, 0.7);
+}
+
+.podiumSecond {
+  order: 1;
+  transform: translateY(20px);
+  border-color: rgba(238, 242, 255, 0.9);
+  box-shadow:
+    0 18px 52px rgba(203, 213, 225, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(140deg, rgba(241, 245, 249, 0.55), rgba(9, 14, 26, 0.84)),
+    radial-gradient(circle at 18% 10%, rgba(248, 250, 252, 0.9), transparent 54%),
+    rgba(9, 14, 26, 0.7);
+}
+
+.podiumThird {
+  order: 3;
+  transform: translateY(0);
+  border-color: rgba(233, 134, 86, 0.85);
+  box-shadow:
+    0 18px 52px rgba(233, 134, 86, 0.45),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(140deg, rgba(255, 226, 205, 0.5), rgba(9, 14, 26, 0.84)),
+    radial-gradient(circle at 18% 10%, rgba(255, 210, 185, 0.9), transparent 54%),
+    rgba(9, 14, 26, 0.7);
+}
+
+@keyframes podiumPop {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.podiumRank {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.podiumScore {
+  font-variant-numeric: tabular-nums;
+}

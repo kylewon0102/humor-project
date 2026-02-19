@@ -19,23 +19,23 @@ export default async function HelloWorldPage() {
   return (
     <div className={baseStyles.page}>
       <main className={baseStyles.main}>
-        <NavBar active="helloworld" />
+        <div className={baseStyles.logoRow}>
+          <div className={baseStyles.logoGroup}>
+            <Image
+              className={baseStyles.logo}
+              src="/columbia-logo.png"
+              alt="Columbia University logo"
+              width={110}
+              height={110}
+              priority
+            />
+            <span className={baseStyles.logoTag}>Week 1</span>
+          </div>
+          <SignOutButton className={baseStyles.headerSignOut} />
+        </div>
+        <NavBar />
         <div className={baseStyles.body}>
           <header className={baseStyles.header}>
-            <div className={baseStyles.logoRow}>
-              <div className={baseStyles.logoGroup}>
-                <Image
-                  className={baseStyles.logo}
-                  src="/columbia-logo.png"
-                  alt="Columbia University logo"
-                  width={96}
-                  height={96}
-                  priority
-                />
-                <span className={baseStyles.logoTag}>Week 1</span>
-              </div>
-              <SignOutButton className={baseStyles.headerSignOut} />
-            </div>
             <h1 className={baseStyles.name}>Hello World</h1>
             <p className={baseStyles.note}>
               A simple intro with my name and basic info.

@@ -2,35 +2,41 @@ import Link from "next/link";
 import styles from "./NavBar.module.css";
 
 type NavBarProps = {
-  active: "captions" | "helloworld" | "auth";
+  active?: "recent" | "top-100" | "favorites" | "images";
 };
 
 export default function NavBar({ active }: NavBarProps) {
   return (
     <nav className={styles.nav} aria-label="Primary">
       <div className={styles.brand}>Humor Project</div>
-      <div className={styles.section}>
-        <p className={styles.sectionTitle}>Weeks</p>
+      <div className={styles.links}>
         <Link
-          className={`${styles.link} ${active === "helloworld" ? styles.active : ""}`}
-          href="/helloworld"
-          aria-current={active === "helloworld" ? "page" : undefined}
+          className={`${styles.link} ${active === "recent" ? styles.active : ""}`}
+          href="/recent"
+          aria-current={active === "recent" ? "page" : undefined}
         >
-          Week 1: Hello World
+          Recent
         </Link>
         <Link
-          className={`${styles.link} ${active === "captions" ? styles.active : ""}`}
-          href="/captions"
-          aria-current={active === "captions" ? "page" : undefined}
+          className={`${styles.link} ${active === "top-100" ? styles.active : ""}`}
+          href="/top-100"
+          aria-current={active === "top-100" ? "page" : undefined}
         >
-          Week 2: Captions
+          Top 50
         </Link>
         <Link
-          className={`${styles.link} ${active === "auth" ? styles.active : ""}`}
-          href="/week3-auth"
-          aria-current={active === "auth" ? "page" : undefined}
+          className={`${styles.link} ${active === "favorites" ? styles.active : ""}`}
+          href="/favorites"
+          aria-current={active === "favorites" ? "page" : undefined}
         >
-          Week 3: Auth
+          Favorites
+        </Link>
+        <Link
+          className={`${styles.link} ${active === "images" ? styles.active : ""}`}
+          href="/images"
+          aria-current={active === "images" ? "page" : undefined}
+        >
+          Images
         </Link>
       </div>
     </nav>
