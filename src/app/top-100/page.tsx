@@ -42,7 +42,7 @@ export default async function Top100Page() {
           </div>
           <SignOutButton className={baseStyles.headerSignOut} />
         </div>
-        <NavBar active="top-50" />
+        <NavBar active="top-100" />
         <div className={baseStyles.body}>
           <header className={baseStyles.header}>
             <h1 className={baseStyles.name}>Top 50</h1>
