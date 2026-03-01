@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import NavBar from "../components/NavBar";
 import SignOutButton from "../components/SignOutButton";
 import baseStyles from "../page.module.css";
+import ImageUploader from "./uploader";
 
 export const dynamic = "force-dynamic";
 
@@ -39,13 +40,11 @@ export default async function ImagesPage() {
           <header className={baseStyles.header}>
             <h1 className={baseStyles.name}>Images</h1>
             <p className={baseStyles.note}>
-              Browse the images tied to your captions.
+              Upload an image to generate captions with the AlmostCrackd pipeline.
             </p>
           </header>
           <section className={baseStyles.content} aria-label="Images">
-            <div className={baseStyles.emptyState}>
-              <p>Image browsing is coming next.</p>
-            </div>
+            <ImageUploader />
           </section>
         </div>
       </main>
