@@ -71,7 +71,11 @@ export async function POST(request: Request) {
   } else if (existingVote?.id) {
     const { error: updateVoteError } = await supabase
       .from("caption_votes")
-      .update({ vote_value: voteValue, modified_datetime_utc: new Date().toISOString() })
+      .update({
+        vote_value: voteValue,
+        modified_by_user_id: user.id,
+        modified_datetime_utc: new Date().toISOString(),
+      })
       .eq("id", existingVote.id);
 
     if (updateVoteError) {
@@ -82,6 +86,8 @@ export async function POST(request: Request) {
       caption_id: captionId,
       profile_id: user.id,
       vote_value: voteValue,
+      created_by_user_id: user.id,
+      modified_by_user_id: user.id,
       created_datetime_utc: new Date().toISOString(),
     });
 
@@ -93,7 +99,11 @@ export async function POST(request: Request) {
   const nextLikeCount = (captionRow?.like_count ?? 0) + delta;
   const { error: updateError } = await supabase
     .from("captions")
-    .update({ like_count: nextLikeCount })
+    .update({
+      like_count: nextLikeCount,
+      modified_by_user_id: user.id,
+      modified_datetime_utc: new Date().toISOString(),
+    })
     .eq("id", captionId);
 
   if (updateError) {
