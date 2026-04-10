@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "./NavBar.module.css";
 
 type NavBarProps = {
-  active?: "recent" | "top-100" | "favorites" | "images";
+  active?: "recent" | "top-100" | "images";
 };
 
 export default function NavBar({ active }: NavBarProps) {
@@ -23,13 +23,6 @@ export default function NavBar({ active }: NavBarProps) {
           aria-current={active === "top-100" ? "page" : undefined}
         >
           Top 50
-        </Link>
-        <Link
-          className={`${styles.link} ${active === "favorites" ? styles.active : ""}`}
-          href="/favorites"
-          aria-current={active === "favorites" ? "page" : undefined}
-        >
-          Favorites
         </Link>
         <Link
           className={`${styles.link} ${active === "images" ? styles.active : ""}`}

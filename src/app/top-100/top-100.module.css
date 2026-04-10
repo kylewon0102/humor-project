@@ -58,6 +58,8 @@
     rgba(9, 14, 26, 0.7);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .podiumHeader {
@@ -65,9 +67,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(8, 15, 29, 0.82);
   font-size: 12px;
-  color: var(--text-secondary);
+  color: rgba(226, 232, 240, 0.86);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -75,16 +77,9 @@
 .podiumImage {
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   background: rgba(15, 23, 42, 0.7);
-  margin-top: 14px;
-}
-
-.podiumImageSecondary {
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
-  margin-top: 22px;
 }
 
 .podiumFirst {
@@ -115,7 +110,7 @@
 
 .podiumThird {
   order: 3;
-  transform: translateY(0);
+  transform: translateY(44px);
   border-color: rgba(233, 134, 86, 0.85);
   box-shadow:
     0 18px 52px rgba(233, 134, 86, 0.45),
@@ -146,4 +141,74 @@
 
 .podiumScore {
   font-variant-numeric: tabular-nums;
+  color: #f8fafc;
+}
+
+.podiumBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.podiumCaption {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.podiumVotes {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.podiumVoteButton {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.podiumVoteButton:hover:enabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.podiumVoteButton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.podiumVoteActive {
+  color: var(--text-primary);
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.16);
+}
+
+.podiumError {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+@media (max-width: 860px) {
+  .podium {
+    grid-template-columns: 1fr;
+    max-width: 460px;
+  }
+
+  .podiumFirst,
+  .podiumSecond,
+  .podiumThird {
+    order: initial;
+    transform: none;
+  }
 }

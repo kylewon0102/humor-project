@@ -29,6 +29,15 @@ type RegisterResponse = {
   now?: number;
 };
 
+type OwnedUpload = {
+  id: string;
+  url: string | null;
+  imageDescription: string;
+  createdAt: string;
+  captionCount: number;
+  latestCaption: string | null;
+};
+
 const formatTimestamp = (value?: string) => {
   if (!value) return "";
   const date = new Date(value);
@@ -42,10 +51,14 @@ export default function ImageUploader() {
   const [cdnUrl, setCdnUrl] = useState<string | null>(null);
   const [imageId, setImageId] = useState<string | null>(null);
   const [captions, setCaptions] = useState<CaptionRecord[]>([]);
+  const [uploads, setUploads] = useState<OwnedUpload[]>([]);
   const [status, setStatus] = useState<
     "idle" | "presign" | "upload" | "register" | "captions" | "done"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [loadingUploads, setLoadingUploads] = useState(true);
+  const [deletingImageId, setDeletingImageId] = useState<string | null>(null);
 
   const acceptValue = useMemo(() => ALLOWED_TYPES.join(","), []);
 
@@ -59,9 +72,32 @@ export default function ImageUploader() {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
+  const loadUploads = async () => {
+    setLoadingUploads(true);
+    try {
+      const response = await fetch("/api/images", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Failed to load your uploads.");
+      }
+      const payload = (await response.json()) as { uploads?: OwnedUpload[] };
+      setUploads(Array.isArray(payload.uploads) ? payload.uploads : []);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to load your uploads.",
+      );
+    } finally {
+      setLoadingUploads(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadUploads();
+  }, []);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextFile = event.target.files?.[0] ?? null;
     setErrorMessage(null);
+    setSuccessMessage(null);
     setCaptions([]);
     setCdnUrl(null);
     setImageId(null);
@@ -80,6 +116,7 @@ export default function ImageUploader() {
   const handleUpload = async () => {
     if (!file) return;
     setErrorMessage(null);
+    setSuccessMessage(null);
     setCaptions([]);
     setCdnUrl(null);
     setImageId(null);
@@ -136,6 +173,7 @@ export default function ImageUploader() {
 
       setCdnUrl(presignPayload.cdnUrl);
       setImageId(registerPayload.imageId);
+      setSuccessMessage("Upload complete. Your image is saved and captions are generating now.");
 
       setStatus("captions");
       const captionResponse = await fetch("/api/pipeline/captions", {
@@ -154,11 +192,51 @@ export default function ImageUploader() {
       const captionPayload = (await captionResponse.json()) as CaptionRecord[];
       setCaptions(Array.isArray(captionPayload) ? captionPayload : []);
       setStatus("done");
+      setSuccessMessage(
+        `Upload complete. ${Array.isArray(captionPayload) ? captionPayload.length : 0} caption${Array.isArray(captionPayload) && captionPayload.length === 1 ? "" : "s"} generated.`,
+      );
+      void loadUploads();
     } catch (error) {
       setStatus("idle");
       setErrorMessage(
         error instanceof Error ? error.message : "Something went wrong.",
       );
+    }
+  };
+
+  const handleDelete = async (uploadId: string) => {
+    if (deletingImageId) return;
+    setDeletingImageId(uploadId);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    try {
+      const response = await fetch("/api/images", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageId: uploadId }),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        throw new Error(payload?.error ?? "Failed to delete image.");
+      }
+
+      setUploads((prev) => prev.filter((upload) => upload.id !== uploadId));
+      if (imageId === uploadId) {
+        setImageId(null);
+        setCdnUrl(null);
+        setCaptions([]);
+      }
+      setSuccessMessage("Image deleted.");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Failed to delete image.",
+      );
+    } finally {
+      setDeletingImageId(null);
     }
   };
 
@@ -169,8 +247,15 @@ export default function ImageUploader() {
       <section className={styles.panel}>
         <h2 className={styles.panelTitle}>Upload an image</h2>
         <p className={styles.panelSubtitle}>
-          Choose a supported image file to generate captions using the pipeline API.
+          Pick an image, click Generate captions, and wait for the confirmation message before
+          moving to another page.
         </p>
+        <div className={styles.instructionsBox}>
+          <p className={styles.instructionsTitle}>Quick steps</p>
+          <p className={styles.instructionsText}>1. Choose one JPG, PNG, WEBP, GIF, or HEIC image.</p>
+          <p className={styles.instructionsText}>2. Click Generate captions.</p>
+          <p className={styles.instructionsText}>3. Look for the success banner and your upload in the list below.</p>
+        </div>
         <div className={styles.fieldRow}>
           <label className={styles.fieldLabel} htmlFor="imageUpload">
             Image file
@@ -212,6 +297,11 @@ export default function ImageUploader() {
             {errorMessage}
           </div>
         ) : null}
+        {successMessage ? (
+          <div className={styles.successBox} role="status">
+            {successMessage}
+          </div>
+        ) : null}
         {cdnUrl ? (
           <div className={styles.metaRow}>
             <div>
@@ -231,7 +321,7 @@ export default function ImageUploader() {
       <section className={styles.panel}>
         <h2 className={styles.panelTitle}>Preview & captions</h2>
         <p className={styles.panelSubtitle}>
-          We will show the uploaded image and the captions returned by the API.
+          Preview the selected image, then review the captions returned by the API.
         </p>
         {previewUrl ? (
           <div className={styles.previewFrame}>
@@ -260,6 +350,53 @@ export default function ImageUploader() {
             ))
           )}
         </div>
+      </section>
+
+      <section className={styles.panel}>
+        <h2 className={styles.panelTitle}>Your recent uploads</h2>
+        <p className={styles.panelSubtitle}>
+          Delete duplicate or unwanted uploads here.
+        </p>
+        {loadingUploads ? (
+          <div className={styles.placeholderBox}>Loading your uploads...</div>
+        ) : uploads.length === 0 ? (
+          <div className={styles.placeholderBox}>You have not uploaded any images yet.</div>
+        ) : (
+          <div className={styles.uploadList}>
+            {uploads.map((upload) => (
+              <article key={upload.id} className={styles.uploadCard}>
+                {upload.url ? (
+                  <img
+                    className={styles.uploadThumb}
+                    src={upload.url}
+                    alt={upload.imageDescription}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className={styles.uploadThumbPlaceholder}>No preview</div>
+                )}
+                <div className={styles.uploadBody}>
+                  <p className={styles.uploadTitle}>{upload.imageDescription}</p>
+                  <p className={styles.uploadMeta}>
+                    {formatTimestamp(upload.createdAt)} · {upload.captionCount} caption
+                    {upload.captionCount === 1 ? "" : "s"}
+                  </p>
+                  <p className={styles.uploadCaption}>
+                    {upload.latestCaption || "Captions are still processing or unavailable."}
+                  </p>
+                </div>
+                <button
+                  className={styles.deleteButton}
+                  type="button"
+                  onClick={() => handleDelete(upload.id)}
+                  disabled={deletingImageId === upload.id}
+                >
+                  {deletingImageId === upload.id ? "Deleting..." : "Delete"}
+                </button>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

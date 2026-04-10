@@ -21,16 +21,18 @@ export default function AuthPage() {
                 />
                 <span className={baseStyles.logoTag}>Auth</span>
               </div>
-            </div>
-            <h1 className={baseStyles.name}>Sign in</h1>
+          </div>
+            <h1 className={baseStyles.name}>Sign in with Google</h1>
             <p className={baseStyles.note}>
-              Connect with Google to access this website.
+              Sign in so the app can save your uploads, votes, and generated captions to
+              your account.
             </p>
           </header>
           <section className={baseStyles.content} aria-label="Sign in">
             <div className={styles.authCard}>
               <p className={styles.authText}>
-                You must be signed in to access this website.
+                Google sign-in is required because voting, uploads, and caption history are
+                tied to your profile.
               </p>
               <SignInButton className={styles.authButton} />
             </div>

@@ -7,7 +7,7 @@ import baseStyles from "../page.module.css";
 import RecentFeed from "../recent/recent-feed";
 import { buildTopRows } from "@/lib/top100";
 import styles from "./top-100.module.css";
-import recentStyles from "../recent/recent.module.css";
+import TopPodium from "./top-podium";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +47,8 @@ export default async function Top100Page() {
           <header className={baseStyles.header}>
             <h1 className={baseStyles.name}>Top 50</h1>
             <p className={baseStyles.note}>
-              The most popular captions, ranked by likes.
+              The most-liked captions ranked by likes. Ties keep their existing order so equal
+              like counts do not jump around.
             </p>
           </header>
           <section className={baseStyles.content} aria-label="Top captions">
@@ -61,47 +62,7 @@ export default async function Top100Page() {
               </div>
             ) : (
               <>
-                <div className={styles.podiumWrap}>
-                  <div className={styles.podiumLabel}>Podium</div>
-                  <div className={styles.podium} aria-label="Top three podium">
-                    {podiumRows.map((row, index) => (
-                      <article
-                        key={row.id}
-                        className={`${styles.podiumCard} ${
-                          index === 0
-                            ? styles.podiumFirst
-                            : index === 1
-                              ? styles.podiumSecond
-                              : styles.podiumThird
-                        }`}
-                      >
-                        <div className={styles.podiumHeader}>
-                          <span className={styles.podiumRank}>
-                            #{index + 1}
-                          </span>
-                          <span className={styles.podiumScore}>
-                            {row.likeCount ?? 0} likes
-                          </span>
-                        </div>
-                        {row.imageUrl ? (
-                          <img
-                            className={`${styles.podiumImage} ${
-                              index === 0 ? "" : styles.podiumImageSecondary
-                            }`}
-                            src={row.imageUrl}
-                            alt={row.imageAlt || "Caption image"}
-                            loading="lazy"
-                          />
-                        ) : null}
-                        <div className={recentStyles.cardBody}>
-                          <p className={recentStyles.caption}>
-                            {row.content?.trim() || "Untitled caption"}
-                          </p>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                </div>
+                <TopPodium initialRows={podiumRows} />
                 <div className={styles.podiumDivider} aria-hidden="true" />
                 <RecentFeed
                   initialRows={feedRows}

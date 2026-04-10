@@ -6,6 +6,7 @@ import SignOutButton from "../components/SignOutButton";
 import baseStyles from "../page.module.css";
 import RecentFeed from "./recent-feed";
 import { buildRecentRows } from "@/lib/recent";
+import styles from "./recent.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +51,8 @@ export default async function RecentPage() {
           <header className={baseStyles.header}>
             <h1 className={baseStyles.name}>Recent captions</h1>
             <p className={baseStyles.note}>
-              Latest captions paired with their images.
+              Start here: browse the newest posts, press Like if a caption lands, or Dislike
+              if it does not.
             </p>
           </header>
           <section className={baseStyles.content} aria-label="Recent captions">
@@ -63,12 +65,30 @@ export default async function RecentPage() {
                 <p>No recent captions found yet.</p>
               </div>
             ) : (
-              <RecentFeed
-                initialRows={rows}
-                initialHasMore={hasMore}
-                initialOffset={nextOffset}
-                pageSize={RECENT_LIMIT}
-              />
+              <>
+                <div className={styles.introPanel}>
+                  <p className={styles.introTitle}>How to use this page</p>
+                  <div className={styles.introGrid}>
+                    <p className={styles.introItem}>
+                      <strong>1.</strong> Look through the newest image-caption pairs.
+                    </p>
+                    <p className={styles.introItem}>
+                      <strong>2.</strong> Use <strong>Like</strong> or <strong>Dislike</strong>{" "}
+                      so the like count is easier to understand than icon-only voting.
+                    </p>
+                    <p className={styles.introItem}>
+                      <strong>3.</strong> Open <strong>Images</strong> to upload your own meme
+                      and manage your recent uploads.
+                    </p>
+                  </div>
+                </div>
+                <RecentFeed
+                  initialRows={rows}
+                  initialHasMore={hasMore}
+                  initialOffset={nextOffset}
+                  pageSize={RECENT_LIMIT}
+                />
+              </>
             )}
           </section>
         </div>

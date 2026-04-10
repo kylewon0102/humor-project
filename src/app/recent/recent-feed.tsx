@@ -140,10 +140,13 @@ export default function RecentFeed({
     }
   };
 
+  const rowOrder = new Map(rows.map((row, index) => [row.id, index]));
+
   const sortedRows = [...rows].sort((a, b) => {
     if (sortMode === "top") {
       const likeDiff = (b.likeCount ?? 0) - (a.likeCount ?? 0);
       if (likeDiff !== 0) return likeDiff;
+      return (rowOrder.get(a.id) ?? 0) - (rowOrder.get(b.id) ?? 0);
     }
     const timeDiff =
       new Date(b.created_datetime_utc).getTime() -
@@ -187,21 +190,21 @@ export default function RecentFeed({
                     type="button"
                     onClick={() => handleVote(row.id, 1)}
                     disabled={isPending}
-                    aria-label="Upvote caption"
+                    aria-label="Like caption"
                     aria-pressed={upActive}
                   >
-                    ▲
+                    Like
                   </button>
-                  <span className={styles.voteCount}>{row.likeCount}</span>
+                  <span className={styles.voteCount}>{row.likeCount} likes</span>
                   <button
                     className={`${styles.voteButton} ${downActive ? styles.voteActive : ""}`}
                     type="button"
                     onClick={() => handleVote(row.id, -1)}
                     disabled={isPending}
-                    aria-label="Downvote caption"
+                    aria-label="Dislike caption"
                     aria-pressed={downActive}
                   >
-                    ▼
+                    Dislike
                   </button>
                 </div>
               </div>

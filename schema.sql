@@ -45,31 +45,36 @@ CREATE TABLE public.caption_requests (
                                          CONSTRAINT caption_requests_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.images(id),
                                          CONSTRAINT caption_requests_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id)
 );
-CREATE TABLE public.caption_saved (
+CREATE TABLE public.caption_saves (
                                       id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
                                       created_datetime_utc timestamp with time zone NOT NULL DEFAULT now(),
                                       modified_datetime_utc timestamp with time zone,
                                       profile_id uuid NOT NULL,
                                       caption_id uuid NOT NULL,
-                                      CONSTRAINT caption_saved_pkey PRIMARY KEY (id),
-                                      CONSTRAINT caption_saved_caption_id_fkey FOREIGN KEY (caption_id) REFERENCES public.captions(id),
-                                      CONSTRAINT caption_saved_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id)
+                                      CONSTRAINT caption_saves_pkey PRIMARY KEY (id),
+                                      CONSTRAINT caption_saves_caption_id_fkey FOREIGN KEY (caption_id) REFERENCES public.captions(id),
+                                      CONSTRAINT caption_saves_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id)
 );
 CREATE TABLE public.caption_votes (
                                       id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
                                       created_datetime_utc timestamp with time zone NOT NULL,
                                       modified_datetime_utc timestamp with time zone,
+                                      created_by_user_id uuid,
+                                      modified_by_user_id uuid,
                                       vote_value smallint NOT NULL,
                                       profile_id uuid NOT NULL,
                                       caption_id uuid NOT NULL,
                                       CONSTRAINT caption_votes_pkey PRIMARY KEY (id),
                                       CONSTRAINT caption_votes_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id),
-                                      CONSTRAINT caption_votes_caption_id_fkey FOREIGN KEY (caption_id) REFERENCES public.captions(id)
+                                      CONSTRAINT caption_votes_caption_id_fkey FOREIGN KEY (caption_id) REFERENCES public.captions(id),
+                                      CONSTRAINT caption_votes_created_by_user_id_fkey FOREIGN KEY (created_by_user_id) REFERENCES public.profiles(id),
+                                      CONSTRAINT caption_votes_modified_by_user_id_fkey FOREIGN KEY (modified_by_user_id) REFERENCES public.profiles(id)
 );
 CREATE TABLE public.captions (
                                  id uuid NOT NULL DEFAULT gen_random_uuid(),
                                  created_datetime_utc timestamp with time zone NOT NULL DEFAULT now(),
                                  modified_datetime_utc timestamp with time zone,
+                                 modified_by_user_id uuid,
                                  content character varying,
                                  is_public boolean NOT NULL,
                                  profile_id uuid NOT NULL,
@@ -84,7 +89,8 @@ CREATE TABLE public.captions (
                                  CONSTRAINT captions_humor_flavor_id_fkey FOREIGN KEY (humor_flavor_id) REFERENCES public.humor_flavors(id),
                                  CONSTRAINT captions_image_id_fkey FOREIGN KEY (image_id) REFERENCES public.images(id),
                                  CONSTRAINT captions_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profiles(id),
-                                 CONSTRAINT captions_llm_prompt_chain_id_fkey FOREIGN KEY (llm_prompt_chain_id) REFERENCES public.llm_prompt_chains(id)
+                                 CONSTRAINT captions_llm_prompt_chain_id_fkey FOREIGN KEY (llm_prompt_chain_id) REFERENCES public.llm_prompt_chains(id),
+                                 CONSTRAINT captions_modified_by_user_id_fkey FOREIGN KEY (modified_by_user_id) REFERENCES public.profiles(id)
 );
 CREATE TABLE public.common_use_categories (
                                               id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,

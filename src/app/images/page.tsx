@@ -40,7 +40,8 @@ export default async function ImagesPage() {
           <header className={baseStyles.header}>
             <h1 className={baseStyles.name}>Images</h1>
             <p className={baseStyles.note}>
-              Upload an image to generate captions with the AlmostCrackd pipeline.
+              Upload a meme image, wait for the success message, then review or delete your
+              recent uploads below.
             </p>
           </header>
           <section className={baseStyles.content} aria-label="Images">
